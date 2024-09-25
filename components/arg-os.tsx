@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image';
-import { Folder, File, X, Maximize2, Minimize2, MessageCircle, User, Battery, Wifi, Volume2, AlertTriangle } from 'lucide-react'
+import { Folder, File, User, Battery, Wifi, Volume2, AlertTriangle } from 'lucide-react'
 
 // Sample data structure for our files and folders
 const fileSystem = {
@@ -461,7 +462,7 @@ const messageSystem: { [key: string]: any } = {
   },
 };
 
-let fileMessages: { [key: string]: any } = {
+const fileMessages: { [key: string]: any } = {
   'Casos Arquivados/2022/Operação Estrondo/estrondo.docx': {
     id: '5',
     firstRun: true
@@ -592,7 +593,7 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
   )
 }
 
-function AlertModal({ onClose }: { onClose: () => void }) {
+function AlertModal() {
   const [consoleOutput, setConsoleOutput] = useState<string[]>([])
 
   useEffect(() => {
@@ -693,10 +694,10 @@ export function ArgOs() {
   const openFile = (path: string[], content: FileContent) => {
     const newFile = { name: path.join('/'), content }
     //setOpenFiles((prev) => [...prev.filter((f) => f.name !== newFile.name), newFile])
-    setOpenFiles((prev) => [newFile])
+    setOpenFiles([newFile])
     setActiveFile(newFile.name);
 
-    let fileMessage = fileMessages[newFile.name];
+    const fileMessage = fileMessages[newFile.name];
     if (fileMessage && fileMessage.firstRun) {
       sendMessage(messageSystem[fileMessage.id]);
       fileMessages[newFile.name].firstRun = false;
@@ -707,12 +708,12 @@ export function ArgOs() {
     }
   }
 
-  const closeFile = (fileName: string) => {
-    setOpenFiles((prev) => prev.filter((f) => f.name !== fileName))
-    if (activeFile === fileName) {
-      setActiveFile(openFiles.length > 1 ? openFiles[0].name : null)
-    }
-  }
+  // const closeFile = (fileName: string) => {
+  //   setOpenFiles((prev) => prev.filter((f) => f.name !== fileName))
+  //   if (activeFile === fileName) {
+  //     setActiveFile(openFiles.length > 1 ? openFiles[0].name : null)
+  //   }
+  // }
 
   const renderFileSystem = (obj: any, path: string[] = []) => {
     return Object.entries(obj).map(([key, value]) => {
@@ -877,7 +878,7 @@ export function ArgOs() {
         </div>
       </div>
 
-      {showAlert && <AlertModal onClose={() => setShowAlert(false)} />}
+      {showAlert && <AlertModal />}
     </div>
   )
 }
